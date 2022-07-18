@@ -5,6 +5,9 @@ go run .
 ```
 ## HTTP Methods
 ```
+/ping — Checking the server connection
+```
+```
 /createPoll — Create a poll with answer options
     options:
         title — Name of poll
