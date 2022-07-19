@@ -1,8 +1,8 @@
 package main
 
 type Poll struct {
-	title   string
-	options map[string]int
+	Title   string         `json:"title"`
+	Options map[string]int `json:"options"`
 }
 
 func creator(title string, options []string) Poll {
@@ -10,7 +10,7 @@ func creator(title string, options []string) Poll {
 	for _, v := range options {
 		o[v] = 0
 	}
-	return Poll{title: title, options: o}
+	return Poll{Title: title, Options: o}
 }
 
 func main() {

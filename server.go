@@ -23,7 +23,7 @@ func createPoll(w http.ResponseWriter, r *http.Request) {
 	title := r.URL.Query().Get("title")
 	options := strings.Split(r.URL.Query().Get("options"), ",")
 	poll := creator(title, options)
-	res, err := json.MarshalIndent(poll, "  ", "\t")
+	res, err := json.MarshalIndent(poll, "", "\t")
 	if err != nil {
 		log.Panic(err)
 	}
