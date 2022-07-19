@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
+	"strings"
 )
 
 func ping(w http.ResponseWriter, _ *http.Request) {
@@ -18,7 +19,19 @@ func ping(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
-func createPoll(w http.ResponseWriter, r *http.Request) {}
+func createPoll(w http.ResponseWriter, r *http.Request) {
+	title := r.URL.Query().Get("title")
+	options := strings.Split(r.URL.Query().Get("options"), ",")
+	poll := creator(title, options)
+	res, err := json.MarshalIndent(poll, "  ", "\t")
+	if err != nil {
+		log.Panic(err)
+	}
+	_, err = w.Write(res)
+	if err != nil {
+		log.Panic(err)
+	}
+}
 
 func server() {
 	mux := http.NewServeMux()
