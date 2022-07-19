@@ -18,9 +18,12 @@ func ping(w http.ResponseWriter, _ *http.Request) {
 	}
 }
 
+func createPoll(w http.ResponseWriter, r *http.Request) {}
+
 func server() {
 	mux := http.NewServeMux()
 	log.Println("Server started!")
 	mux.HandleFunc("/ping", ping)
+	mux.HandleFunc("/createPoll", createPoll)
 	log.Fatal(http.ListenAndServe(":8000", mux))
 }
