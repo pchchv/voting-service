@@ -6,8 +6,11 @@ type Poll struct {
 }
 
 func creator(title string, options []string) Poll {
-	var p Poll
-	return p
+	o := make(map[string]int)
+	for _, v := range options {
+		o[v] = 0
+	}
+	return Poll{title: title, options: o}
 }
 
 func main() {
