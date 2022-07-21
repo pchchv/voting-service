@@ -50,3 +50,9 @@ go run .
         "DELETE" :8000/deletePoll?title=RustVSGolang
         "DELETE" :8000/deletePoll?id=000f574a
 ```
+### Params for ```.env``` file
+```
+MONGO=mongodb://localhost:27017
+DATABASE=random_values
+COLLECTION=values
+```
