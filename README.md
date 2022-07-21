@@ -6,6 +6,9 @@ go run .
 ## HTTP Methods
 ```
 /ping — Checking the server connection
+
+    example: 
+        "GET" :8000/ping
 ```
 ```
 /createPoll — Create a poll with answer options
@@ -14,7 +17,7 @@ go run .
         options — Answer options
 
     example: 
-        http://localhost:8000/createPoll?title=RustVSGolang&options=Golang,Rust
+        "POST" :8000/createPoll?title=RustVSGolang&options=Golang,Rust
 ```
 ```
 /poll — Vote for a specific option
@@ -24,8 +27,8 @@ go run .
         option — Selected option
 
     example: 
-        http://localhost:8000/poll?title=RustVSGolang&option=Golang
-        http://localhost:8000/poll?id=000f574a&option=Golang
+        "PATCH" :8000/poll?title=RustVSGolang&option=Golang
+        "PATCH" :8000/poll?id=000f574a&option=Golang
 ```
 ```
 /getResult — Get a result on a particular poll
@@ -34,6 +37,16 @@ go run .
         id — Poll id
 
     example:
-        http://localhost:8000/getResult?title=RustVSGolang
-        http://localhost:8000/getResult?id=000f574a
+        "GET" :8000/getResult?title=RustVSGolang
+        "GET" :8000/getResult?id=000f574a
+```
+```
+/deletePoll — Delete poll
+    options:
+        title — Name of poll
+        options — Answer options
+
+    example: 
+        "DELETE" :8000/deletePoll?title=RustVSGolang
+        "DELETE" :8000/deletePoll?id=000f574a
 ```
