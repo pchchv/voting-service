@@ -10,7 +10,7 @@ import (
 
 func ping(c echo.Context) error {
 	msg := "Voting Service. Version 0.0.2"
-	return c.JSONPretty(http.StatusOK, msg, "\t")
+	return c.String(http.StatusOK, msg)
 }
 
 func createPoll(c echo.Context) error {
