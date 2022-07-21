@@ -22,9 +22,12 @@ func createPoll(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
+func deletePoll(c echo.Context) error {}
+
 func server() {
 	e := echo.New()
 	e.GET("/ping", ping)
 	e.POST("/createPoll", createPoll)
+	e.DELETE("/deletePoll", deletePoll)
 	log.Fatal(e.Start(":8000"))
 }
