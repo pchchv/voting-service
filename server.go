@@ -23,6 +23,6 @@ func createPoll(c echo.Context) error {
 func server() {
 	e := echo.New()
 	e.GET("/ping", ping)
-	e.GET("/createPoll", createPoll)
+	e.POST("/createPoll", createPoll)
 	log.Fatal(e.Start(":8000"))
 }

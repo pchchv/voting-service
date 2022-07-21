@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -56,7 +57,11 @@ func TestLoadPing(t *testing.T) {
 }
 
 func TestServerCreate(t *testing.T) {
-	res, err := http.Get("http://127.0.0.1:8000/createPoll?title=RustVSGolang&options=Golang,Rust")
+	data := url.Values{
+		"title":   {"RustVSGolang"},
+		"options": {"Golang,Rust"},
+	}
+	res, err := http.PostForm("http://127.0.0.1:8000/createPoll", data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -78,7 +83,7 @@ func TestLoadCreate(t *testing.T) {
 	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
-		Method: "GET",
+		Method: "POST",
 		URL:    "http://localhost:8000/createPoll?title=RustVSGolang&options=Golang,Rust",
 	})
 	attacker := vegeta.NewAttacker()
