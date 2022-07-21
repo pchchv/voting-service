@@ -22,7 +22,17 @@ func createPoll(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
-func deletePoll(c echo.Context) error {}
+func deletePoll(c echo.Context) error {
+	// TODO: Should return a remote poll in JSON format
+	title := c.QueryParam("title")
+	id := c.QueryParam("id")
+	if title != "" {
+		deleter("title", title)
+	} else {
+		deleter("id", id)
+	}
+	return c.String(http.StatusOK, "Poll deleted")
+}
 
 func server() {
 	e := echo.New()

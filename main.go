@@ -53,6 +53,14 @@ func toDB(poll Poll) string {
 	return fmt.Sprint(result.InsertedID)
 }
 
+func deleter(t string, v string) {
+	// TODO: Should delete the poll from mongo and return it
+	if t == "title" {
+		fmt.Println(v)
+	} else if t == "id" {
+		fmt.Println(v)
+	}
+}
 func main() {
 	db()
 	server()
