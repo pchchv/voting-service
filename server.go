@@ -1,39 +1,28 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
+	"net/http"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/labstack/echo/v4"
 )
 
-func ping(c *fiber.Ctx) error {
-	msg, err := json.MarshalIndent("Voting Service. Version 0.0.2", "\t", "\t")
-	if err != nil {
-		log.Panic(err)
-	}
-	return c.SendString(string(msg))
+func ping(c echo.Context) error {
+	msg := "Voting Service. Version 0.0.2"
+	return c.JSONPretty(http.StatusOK, msg, "\t")
 }
 
-func createPoll(c *fiber.Ctx) error {
-	title := c.Query("title")
-	options := strings.Split(c.Query("options"), ",")
+func createPoll(c echo.Context) error {
+	title := c.QueryParam("title")
+	options := strings.Split(c.QueryParam("options"), ",")
 	poll := creator(title, options)
-	res, err := json.MarshalIndent(poll, "", "\t")
-	if err != nil {
-		log.Panic(err)
-	}
-	return c.SendString(string(res))
-}
-
-func setupRoutes(app *fiber.App) {
-	app.Get("/ping", ping)
-	app.Post("/createPoll", createPoll)
+	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
 func server() {
-	app := fiber.New()
-	setupRoutes(app)
-	log.Fatal(app.Listen(":8000"))
+	e := echo.New()
+	e.GET("/ping", ping)
+	e.GET("/createPoll", createPoll)
+	log.Fatal(e.Start(":8000"))
 }
