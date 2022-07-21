@@ -1,10 +1,13 @@
 package main
 
 import (
+	"context"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/joho/godotenv"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
@@ -38,6 +41,19 @@ func creator(title string, options []string) Poll {
 	return Poll{Title: title, Options: o}
 }
 
+func toDB(poll Poll) string {
+	v, err := bson.Marshal(poll)
+	if err != nil {
+		log.Panic(err)
+	}
+	result, err := collection.InsertOne(context.TODO(), v)
+	if err != nil {
+		log.Panic(err)
+	}
+	return fmt.Sprint(result.InsertedID)
+}
+
 func main() {
+	db()
 	server()
 }
