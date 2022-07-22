@@ -12,6 +12,7 @@ import (
 )
 
 var collection *mongo.Collection
+var envURL string
 
 type Poll struct {
 	Title   string         `json:"title"`
@@ -62,6 +63,7 @@ func deleter(t string, v string) {
 	}
 }
 func main() {
+	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
 	db()
 	server()
 }

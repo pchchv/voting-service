@@ -39,5 +39,5 @@ func server() {
 	e.GET("/ping", ping)
 	e.POST("/createPoll", createPoll)
 	e.DELETE("/deletePoll", deletePoll)
-	log.Fatal(e.Start(":8000"))
+	log.Fatal(e.Start(envURL))
 }

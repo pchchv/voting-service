@@ -53,6 +53,8 @@ go run .
 ### Params for ```.env``` file
 ```
 MONGO=mongodb://localhost:27017
-DATABASE=random_values
-COLLECTION=values
+DATABASE=voting_service
+COLLECTION=polls
+HOST=127.0.0.1
+PORT=8000
 ```

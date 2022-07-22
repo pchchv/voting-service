@@ -14,7 +14,7 @@ import (
 )
 
 func TestServerPing(t *testing.T) {
-	res, err := http.Get("http://127.0.0.1:8000/ping")
+	res, err := http.Get(envURL + "/ping")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +45,7 @@ func TestLoadPing(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
-		URL:    "http://localhost:8000/ping",
+		URL:    envURL + "/ping",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
@@ -61,7 +61,7 @@ func TestServerCreate(t *testing.T) {
 		"title":   {"RustVSGolang"},
 		"options": {"Golang,Rust"},
 	}
-	res, err := http.PostForm("http://127.0.0.1:8000/createPoll", data)
+	res, err := http.PostForm(envURL+"/createPoll", data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +84,7 @@ func TestLoadCreate(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "POST",
-		URL:    "http://localhost:8000/createPoll?title=RustVSGolang&options=Golang,Rust",
+		URL:    envURL + "/createPoll?title=RustVSGolang&options=Golang,Rust",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
