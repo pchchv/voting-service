@@ -21,5 +21,5 @@ func db() {
 		log.Fatal(err)
 	}
 	log.Println("Connected to MongoDB!")
-	collection = client.Database(getEnvValue("DATABASE")).Collection("COLLECTION")
+	collection = client.Database(getEnvValue("DATABASE")).Collection(getEnvValue("COLLECTION"))
 }

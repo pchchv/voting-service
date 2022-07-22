@@ -19,6 +19,11 @@ type Poll struct {
 	Options map[string]int `json:"options"`
 }
 
+type ResultPoll struct {
+	Id   string `json:"id"`
+	Poll Poll
+}
+
 func init() {
 	// Load values from .env into the system
 	if err := godotenv.Load(); err != nil {
@@ -42,7 +47,7 @@ func creator(title string, options []string) Poll {
 	return Poll{Title: title, Options: o}
 }
 
-func toDB(poll Poll) string {
+func toDB(poll Poll) ResultPoll {
 	v, err := bson.Marshal(poll)
 	if err != nil {
 		log.Panic(err)
@@ -51,7 +56,7 @@ func toDB(poll Poll) string {
 	if err != nil {
 		log.Panic(err)
 	}
-	return fmt.Sprint(result.InsertedID)
+	return ResultPoll{fmt.Sprint(result.InsertedID), poll}
 }
 
 func deleter(t string, v string) {

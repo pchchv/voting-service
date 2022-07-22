@@ -17,9 +17,8 @@ func createPoll(c echo.Context) error {
 	title := c.QueryParam("title")
 	options := strings.Split(c.QueryParam("options"), ",")
 	poll := creator(title, options)
-	id := toDB(poll)
-	log.Panicln(id)
-	return c.JSONPretty(http.StatusOK, poll, "\t")
+	res := toDB(poll)
+	return c.JSONPretty(http.StatusOK, res, "\t")
 }
 
 func deletePoll(c echo.Context) error {
