@@ -74,6 +74,12 @@ func fromDB(title string) string {
 	return fmt.Sprint(polls[0]["_id"])
 }
 
+func voter(title string, option string) ResultPoll {
+	// TODO: Adds one vote and returns a poll
+	var result ResultPoll
+	return result
+}
+
 func deleter(t string, v string) {
 	// TODO: Should delete the poll from mongo and return it
 	if t == "title" {
@@ -82,6 +88,7 @@ func deleter(t string, v string) {
 		fmt.Println(v)
 	}
 }
+
 func main() {
 	envURL = getEnvValue("HOST") + ":" + getEnvValue("PORT")
 	db()

@@ -44,7 +44,7 @@ go run .
 /deletePoll — Delete poll
     options:
         title — Name of poll
-        options — Answer options
+        id — Poll id
 
     example: 
         "DELETE" :8000/deletePoll?title=RustVSGolang

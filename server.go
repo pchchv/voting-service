@@ -39,10 +39,18 @@ func deletePoll(c echo.Context) error {
 	return c.String(http.StatusOK, "Poll deleted")
 }
 
+func poll(c echo.Context) error {
+	title := c.QueryParam("title")
+	option := c.QueryParam("options")
+	poll := voter(title, option)
+	return c.JSONPretty(http.StatusOK, poll, "\t")
+}
+
 func server() {
 	e := echo.New()
 	e.GET("/ping", ping)
 	e.POST("/createPoll", createPoll)
 	e.DELETE("/deletePoll", deletePoll)
+	e.PATCH("/poll", poll)
 	log.Fatal(e.Start(envURL))
 }
