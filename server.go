@@ -16,9 +16,15 @@ func ping(c echo.Context) error {
 func createPoll(c echo.Context) error {
 	title := c.QueryParam("title")
 	options := strings.Split(c.QueryParam("options"), ",")
-	poll := creator(title, options)
-	res := toDB(poll)
-	return c.JSONPretty(http.StatusOK, res, "\t")
+	v := fromDB(title)
+	if v == "id not found" {
+		poll := creator(title, options)
+		res := toDB(poll)
+		return c.JSONPretty(http.StatusOK, res, "\t")
+	} else {
+		v = "The poll duplicates one already created. Id of an existing poll: " + v
+		return c.JSONPretty(http.StatusOK, v, "\t")
+	}
 }
 
 func deletePoll(c echo.Context) error {

@@ -59,6 +59,21 @@ func toDB(poll Poll) ResultPoll {
 	return ResultPoll{fmt.Sprint(result.InsertedID), poll}
 }
 
+func fromDB(title string) string {
+	res, err := collection.Find(context.TODO(), bson.M{"title": title})
+	if err != nil {
+		log.Panic(err)
+	}
+	var polls []bson.M
+	if err = res.All(context.TODO(), &polls); err != nil {
+		log.Panic(err)
+	}
+	if polls == nil {
+		return "id not found"
+	}
+	return fmt.Sprint(polls[0]["_id"])
+}
+
 func deleter(t string, v string) {
 	// TODO: Should delete the poll from mongo and return it
 	if t == "title" {
