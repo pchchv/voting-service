@@ -143,3 +143,30 @@ func TestLoadPatch(t *testing.T) {
 	metrics.Close()
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
 }
+
+func TestServerDelete(t *testing.T) {
+	body := []byte(`[{"title":  "RustVSGolang"}]`)
+	res, err := http.NewRequest("DELETE", testURL+"/poll", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Response.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+}
+
+func TestLoadDelete(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "DELETE",
+		URL:    testURL + "/poll?title=RustVSGolang&options=Golang,Rust",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
