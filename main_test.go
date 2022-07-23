@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"io"
 	"io/ioutil"
 	"log"
@@ -72,15 +73,6 @@ func TestServerCreate(t *testing.T) {
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("status not OK")
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			t.Error(err)
-		}
-	}(res.Body)
-	if err != nil {
-		t.Fatal(err)
-	}
 }
 
 func TestLoadCreate(t *testing.T) {
@@ -107,15 +99,6 @@ func TestServerGet(t *testing.T) {
 	if res.StatusCode != http.StatusOK {
 		t.Errorf("status not OK")
 	}
-	defer func(Body io.ReadCloser) {
-		err := Body.Close()
-		if err != nil {
-			t.Error(err)
-		}
-	}(res.Body)
-	if err != nil {
-		t.Fatal(err)
-	}
 }
 
 func TestLoadGet(t *testing.T) {
@@ -124,6 +107,33 @@ func TestLoadGet(t *testing.T) {
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
 		URL:    testURL + "/poll?title=RustVSGolang&options=Golang,Rust",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
+
+func TestServerPatch(t *testing.T) {
+	body := []byte(`[{"title":  "RustVSGolang", "option": "Golang"}]`)
+	res, err := http.NewRequest("PATHC", testURL+"/poll", bytes.NewBuffer(body))
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.Response.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+}
+
+func TestLoadPatch(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "PATCH",
+		URL:    testURL + "/poll?title=RustVSGolang&options=Golang",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
