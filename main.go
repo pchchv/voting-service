@@ -86,13 +86,15 @@ func getter(title string, value string) ResultPoll {
 	return result
 }
 
-func deleter(t string, v string) {
+func deleter(t string, v string) ResultPoll {
 	// TODO: Should delete the poll from mongo and return it
+	var result ResultPoll
 	if t == "title" {
 		fmt.Println(v)
 	} else if t == "id" {
 		fmt.Println(v)
 	}
+	return result
 }
 
 func main() {

@@ -47,15 +47,16 @@ func getPoll(c echo.Context) error {
 }
 
 func deletePoll(c echo.Context) error {
+	var poll ResultPoll
 	// TODO: Should return a remote poll in JSON format
 	title := c.QueryParam("title")
 	id := c.QueryParam("id")
 	if title != "" {
-		deleter("title", title)
+		poll = deleter("title", title)
 	} else {
-		deleter("id", id)
+		poll = deleter("id", id)
 	}
-	return c.String(http.StatusOK, "Poll deleted")
+	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
 func server() {
