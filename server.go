@@ -47,8 +47,7 @@ func getPoll(c echo.Context) error {
 }
 
 func deletePoll(c echo.Context) error {
-	var poll ResultPoll
-	// TODO: Should return a remote poll in JSON format
+	var poll *Poll
 	title := c.QueryParam("title")
 	id := c.QueryParam("id")
 	if title != "" {

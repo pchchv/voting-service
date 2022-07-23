@@ -86,13 +86,17 @@ func getter(title string, value string) ResultPoll {
 	return result
 }
 
-func deleter(t string, v string) ResultPoll {
-	// TODO: Should delete the poll from mongo and return it
-	var result ResultPoll
+func deleter(t string, v string) *Poll {
+	var res *mongo.SingleResult
+	result := &Poll{}
 	if t == "title" {
-		fmt.Println(v)
+		res = collection.FindOneAndDelete(context.TODO(), bson.M{"title": v})
 	} else if t == "id" {
-		fmt.Println(v)
+		res = collection.FindOneAndDelete(context.TODO(), bson.M{"_id": v})
+	}
+	err := res.Decode(result)
+	if err != nil {
+		log.Panic(err)
 	}
 	return result
 }
