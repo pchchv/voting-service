@@ -98,3 +98,38 @@ func TestLoadCreate(t *testing.T) {
 	metrics.Close()
 	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
 }
+
+func TestServerGet(t *testing.T) {
+	res, err := http.Get(testURL + "/poll?title=RustVSGolang&options=RustVSGolang")
+	if err != nil {
+		t.Fatal(err)
+	}
+	if res.StatusCode != http.StatusOK {
+		t.Errorf("status not OK")
+	}
+	defer func(Body io.ReadCloser) {
+		err := Body.Close()
+		if err != nil {
+			t.Error(err)
+		}
+	}(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
+func TestLoadGet(t *testing.T) {
+	rate := vegeta.Rate{Freq: 1000, Per: time.Second}
+	duration := 5 * time.Second
+	targeter := vegeta.NewStaticTargeter(vegeta.Target{
+		Method: "GET",
+		URL:    testURL + "/poll?title=RustVSGolang&options=Golang,Rust",
+	})
+	attacker := vegeta.NewAttacker()
+	var metrics vegeta.Metrics
+	for res := range attacker.Attack(targeter, rate, duration, "Big Bang!") {
+		metrics.Add(res)
+	}
+	metrics.Close()
+	log.Printf("99th percentile: %s\n", metrics.Latencies.P99)
+}
