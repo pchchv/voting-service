@@ -5,22 +5,32 @@ go run .
 ```
 ## HTTP Methods
 ```
-/ping — Checking the server connection
+"GET" /ping — Checking the server connection
 
     example: 
         "GET" :8000/ping
 ```
 ```
-/createpoll — Create a poll with answer options
+"POST" /poll — Create a poll with answer options
     options:
         title — Name of poll
         options — Answer options
 
     example: 
-        "POST" :8000/createpoll?title=RustVSGolang&options=Golang,Rust
+        "POST" :8000/poll?title=RustVSGolang&options=Golang,Rust
 ```
 ```
-/poll — Vote for a specific option
+"GET" /poll — Get a result on a particular poll
+    options:
+        title — Name of poll
+        id — Poll id
+
+    example:
+        "GET" :8000/poll?title=RustVSGolang
+        "GET" :8000/poll?id=000f574a
+```
+```
+"PATCH" /poll — Vote for a specific option
     options:
         title — Name of poll
         id — Poll id
@@ -31,24 +41,14 @@ go run .
         "PATCH" :8000/poll?id=000f574a&option=Golang
 ```
 ```
-/getpoll — Get a result on a particular poll
-    options:
-        title — Name of poll
-        id — Poll id
-
-    example:
-        "GET" :8000/getpoll?title=RustVSGolang
-        "GET" :8000/getpoll?id=000f574a
-```
-```
-/deletepoll — Delete poll
+"DELETE" /poll — Delete poll
     options:
         title — Name of poll
         id — Poll id
 
     example: 
-        "DELETE" :8000/deletepoll?title=RustVSGolang
-        "DELETE" :8000/deletepoll?id=000f574a
+        "DELETE" :8000/poll?title=RustVSGolang
+        "DELETE" :8000/poll?id=000f574a
 ```
 ### Params for ```.env``` file
 ```

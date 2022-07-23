@@ -61,9 +61,9 @@ func deletePoll(c echo.Context) error {
 func server() {
 	e := echo.New()
 	e.GET("/ping", ping)
-	e.POST("/createpoll", createPoll)
+	e.POST("/poll", createPoll)
 	e.PATCH("/poll", poll)
-	e.GET("/getpoll", getPoll)
-	e.DELETE("/deletepoll", deletePoll)
+	e.GET("/poll", getPoll)
+	e.DELETE("/poll", deletePoll)
 	log.Fatal(e.Start(envURL))
 }
