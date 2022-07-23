@@ -60,10 +60,22 @@ func toDB(poll Poll) ResultPoll {
 	return ResultPoll{fmt.Sprint(result.InsertedID), poll}
 }
 
-func voter(title string, option string) ResultPoll {
-	// TODO: Adds one vote and returns a poll
-	var result ResultPoll
-	return result
+func voter(title string, value string, option string) Poll {
+	poll, err := getter(title, value)
+	if err != nil {
+		log.Panic(err)
+	}
+	t := poll.Title
+	o := poll.Options
+	o[option] += 1
+	p := Poll{t, o}
+	filter := bson.D{{Key: title, Value: value}}
+	update := bson.D{{Key: "$set", Value: bson.D{{Key: "title", Value: t}, {Key: "options", Value: o}}}}
+	_, err = collection.UpdateOne(context.TODO(), filter, update)
+	if err != nil {
+		log.Panic(err)
+	}
+	return p
 }
 
 func getter(title string, value string) (*Poll, error) {

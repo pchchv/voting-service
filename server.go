@@ -29,9 +29,15 @@ func createPoll(c echo.Context) error {
 }
 
 func poll(c echo.Context) error {
+	var poll Poll
 	title := c.QueryParam("title")
-	option := c.QueryParam("options")
-	poll := voter(title, option)
+	id := c.QueryParam("id")
+	option := c.QueryParam("option")
+	if title != "" {
+		poll = voter("title", title, option)
+	} else {
+		poll = voter("id", id, option)
+	}
 	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
