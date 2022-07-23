@@ -14,6 +14,7 @@ import (
 
 var collection *mongo.Collection
 var envURL string
+var testURL string
 
 type Poll struct {
 	Title   string         `json:"title"`

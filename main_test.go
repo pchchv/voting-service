@@ -13,8 +13,12 @@ import (
 	vegeta "github.com/tsenart/vegeta/v12/lib"
 )
 
+func Test(t *testing.T) {
+	testURL = "http://" + getEnvValue("HOST") + ":" + getEnvValue("PORT")
+}
+
 func TestServerPing(t *testing.T) {
-	res, err := http.Get(envURL + "/ping")
+	res, err := http.Get(testURL + "/ping")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -45,7 +49,7 @@ func TestLoadPing(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "GET",
-		URL:    envURL + "/ping",
+		URL:    testURL + "/ping",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
@@ -61,7 +65,7 @@ func TestServerCreate(t *testing.T) {
 		"title":   {"RustVSGolang"},
 		"options": {"Golang,Rust"},
 	}
-	res, err := http.PostForm(envURL+"/createPoll", data)
+	res, err := http.PostForm(testURL+"/poll", data)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -84,7 +88,7 @@ func TestLoadCreate(t *testing.T) {
 	duration := 5 * time.Second
 	targeter := vegeta.NewStaticTargeter(vegeta.Target{
 		Method: "POST",
-		URL:    envURL + "/createPoll?title=RustVSGolang&options=Golang,Rust",
+		URL:    testURL + "/poll?title=RustVSGolang&options=Golang,Rust",
 	})
 	attacker := vegeta.NewAttacker()
 	var metrics vegeta.Metrics
