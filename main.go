@@ -80,6 +80,12 @@ func voter(title string, option string) ResultPoll {
 	return result
 }
 
+func getter(title string, value string) ResultPoll {
+	// TODO: Return the polling data
+	var result ResultPoll
+	return result
+}
+
 func deleter(t string, v string) {
 	// TODO: Should delete the poll from mongo and return it
 	if t == "title" {

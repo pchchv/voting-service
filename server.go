@@ -27,6 +27,25 @@ func createPoll(c echo.Context) error {
 	}
 }
 
+func poll(c echo.Context) error {
+	title := c.QueryParam("title")
+	option := c.QueryParam("options")
+	poll := voter(title, option)
+	return c.JSONPretty(http.StatusOK, poll, "\t")
+}
+
+func getPoll(c echo.Context) error {
+	var poll ResultPoll
+	title := c.QueryParam("title")
+	id := c.QueryParam("id")
+	if title != "" {
+		poll = getter("title", title)
+	} else {
+		poll = getter("id", id)
+	}
+	return c.JSONPretty(http.StatusOK, poll, "\t")
+}
+
 func deletePoll(c echo.Context) error {
 	// TODO: Should return a remote poll in JSON format
 	title := c.QueryParam("title")
@@ -39,18 +58,12 @@ func deletePoll(c echo.Context) error {
 	return c.String(http.StatusOK, "Poll deleted")
 }
 
-func poll(c echo.Context) error {
-	title := c.QueryParam("title")
-	option := c.QueryParam("options")
-	poll := voter(title, option)
-	return c.JSONPretty(http.StatusOK, poll, "\t")
-}
-
 func server() {
 	e := echo.New()
 	e.GET("/ping", ping)
-	e.POST("/createPoll", createPoll)
-	e.DELETE("/deletePoll", deletePoll)
+	e.POST("/createpoll", createPoll)
 	e.PATCH("/poll", poll)
+	e.GET("/getpoll", getPoll)
+	e.DELETE("/deletepoll", deletePoll)
 	log.Fatal(e.Start(envURL))
 }

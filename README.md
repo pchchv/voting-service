@@ -11,13 +11,13 @@ go run .
         "GET" :8000/ping
 ```
 ```
-/createPoll — Create a poll with answer options
+/createpoll — Create a poll with answer options
     options:
         title — Name of poll
         options — Answer options
 
     example: 
-        "POST" :8000/createPoll?title=RustVSGolang&options=Golang,Rust
+        "POST" :8000/createpoll?title=RustVSGolang&options=Golang,Rust
 ```
 ```
 /poll — Vote for a specific option
@@ -31,24 +31,24 @@ go run .
         "PATCH" :8000/poll?id=000f574a&option=Golang
 ```
 ```
-/getResult — Get a result on a particular poll
+/getpoll — Get a result on a particular poll
     options:
         title — Name of poll
         id — Poll id
 
     example:
-        "GET" :8000/getResult?title=RustVSGolang
-        "GET" :8000/getResult?id=000f574a
+        "GET" :8000/getpoll?title=RustVSGolang
+        "GET" :8000/getpoll?id=000f574a
 ```
 ```
-/deletePoll — Delete poll
+/deletepoll — Delete poll
     options:
         title — Name of poll
         id — Poll id
 
     example: 
-        "DELETE" :8000/deletePoll?title=RustVSGolang
-        "DELETE" :8000/deletePoll?id=000f574a
+        "DELETE" :8000/deletepoll?title=RustVSGolang
+        "DELETE" :8000/deletepoll?id=000f574a
 ```
 ### Params for ```.env``` file
 ```
