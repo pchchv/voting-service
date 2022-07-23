@@ -35,7 +35,7 @@ func poll(c echo.Context) error {
 }
 
 func getPoll(c echo.Context) error {
-	var poll ResultPoll
+	var poll *Poll
 	title := c.QueryParam("title")
 	id := c.QueryParam("id")
 	if title != "" {

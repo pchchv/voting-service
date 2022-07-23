@@ -80,19 +80,28 @@ func voter(title string, option string) ResultPoll {
 	return result
 }
 
-func getter(title string, value string) ResultPoll {
-	// TODO: Return the polling data
-	var result ResultPoll
+func getter(title string, value string) *Poll {
+	var res *mongo.SingleResult
+	result := &Poll{}
+	if title == "title" {
+		res = collection.FindOne(context.TODO(), bson.M{"title": value})
+	} else if title == "id" {
+		res = collection.FindOne(context.TODO(), bson.M{"_id": value})
+	}
+	err := res.Decode(result)
+	if err != nil {
+		log.Panic(err)
+	}
 	return result
 }
 
-func deleter(t string, v string) *Poll {
+func deleter(title string, value string) *Poll {
 	var res *mongo.SingleResult
 	result := &Poll{}
-	if t == "title" {
-		res = collection.FindOneAndDelete(context.TODO(), bson.M{"title": v})
-	} else if t == "id" {
-		res = collection.FindOneAndDelete(context.TODO(), bson.M{"_id": v})
+	if title == "title" {
+		res = collection.FindOneAndDelete(context.TODO(), bson.M{"title": value})
+	} else if title == "id" {
+		res = collection.FindOneAndDelete(context.TODO(), bson.M{"_id": value})
 	}
 	err := res.Decode(result)
 	if err != nil {
