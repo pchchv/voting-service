@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strings"
@@ -16,14 +17,14 @@ func ping(c echo.Context) error {
 func createPoll(c echo.Context) error {
 	title := c.QueryParam("title")
 	options := strings.Split(c.QueryParam("options"), ",")
-	v := fromDB(title)
-	if v == "id not found" {
+	v, err := getter("title", title)
+	if err != nil {
 		poll := creator(title, options)
 		res := toDB(poll)
 		return c.JSONPretty(http.StatusOK, res, "\t")
 	} else {
-		v = "The poll duplicates one already created. Id of an existing poll: " + v
-		return c.JSONPretty(http.StatusOK, v, "\t")
+		res := fmt.Sprintf("The poll duplicates one already created. Existing poll: %v", v)
+		return c.JSONPretty(http.StatusOK, res, "\t")
 	}
 }
 
@@ -36,12 +37,19 @@ func poll(c echo.Context) error {
 
 func getPoll(c echo.Context) error {
 	var poll *Poll
+	var err error
 	title := c.QueryParam("title")
 	id := c.QueryParam("id")
 	if title != "" {
-		poll = getter("title", title)
+		poll, err = getter("title", title)
+		if err != nil {
+			log.Panic(err)
+		}
 	} else {
-		poll = getter("id", id)
+		poll, err = getter("id", id)
+		if err != nil {
+			log.Panic(err)
+		}
 	}
 	return c.JSONPretty(http.StatusOK, poll, "\t")
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -59,28 +60,13 @@ func toDB(poll Poll) ResultPoll {
 	return ResultPoll{fmt.Sprint(result.InsertedID), poll}
 }
 
-func fromDB(title string) string {
-	res, err := collection.Find(context.TODO(), bson.M{"title": title})
-	if err != nil {
-		log.Panic(err)
-	}
-	var polls []bson.M
-	if err = res.All(context.TODO(), &polls); err != nil {
-		log.Panic(err)
-	}
-	if polls == nil {
-		return "id not found"
-	}
-	return fmt.Sprint(polls[0]["_id"])
-}
-
 func voter(title string, option string) ResultPoll {
 	// TODO: Adds one vote and returns a poll
 	var result ResultPoll
 	return result
 }
 
-func getter(title string, value string) *Poll {
+func getter(title string, value string) (*Poll, error) {
 	var res *mongo.SingleResult
 	result := &Poll{}
 	if title == "title" {
@@ -90,9 +76,9 @@ func getter(title string, value string) *Poll {
 	}
 	err := res.Decode(result)
 	if err != nil {
-		log.Panic(err)
+		return result, errors.New("Poll not found")
 	}
-	return result
+	return result, nil
 }
 
 func deleter(title string, value string) *Poll {
