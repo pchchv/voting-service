@@ -58,12 +58,16 @@ func deletePoll(c echo.Context) error {
 	return c.JSONPretty(http.StatusOK, poll, "\t")
 }
 
-func server() {
-	e := echo.New()
+func routes(e *echo.Echo) {
 	e.GET("/ping", ping)
 	e.POST("/poll", createPoll)
 	e.PATCH("/poll", poll)
 	e.GET("/poll", getPoll)
 	e.DELETE("/poll", deletePoll)
+}
+
+func server() {
+	e := echo.New()
+	routes(e)
 	log.Fatal(e.Start(envURL))
 }
